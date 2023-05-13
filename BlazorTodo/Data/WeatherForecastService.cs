@@ -9,7 +9,7 @@ namespace BlazorTodo.Data
 
         public Task<WeatherForecast[]> GetForecastAsync(DateOnly startDate)
         {
-            return Task.FromResult(Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            return System.Threading.Tasks.Task.FromResult(Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = startDate.AddDays(index),
                 TemperatureC = Random.Shared.Next(-20, 55),

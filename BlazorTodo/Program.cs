@@ -1,13 +1,15 @@
 using BlazorTodo.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var  connectionString = builder.Configuration.GetConnectionString("BlazorTaskDB");
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddDbContextFactory<BlazoTaskDbContext>(options=>options.UseSqlite(connectionString));
 
 var app = builder.Build();
 

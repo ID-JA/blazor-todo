@@ -1,6 +1,7 @@
 ﻿@page "/fetchdata"
-@using BlazorTodo.Data
+@using BlazorTodo.Data;
 @inject WeatherForecastService ForecastService
+@inject IJSRuntime JS
 
 <PageTitle>Weather forecast</PageTitle>
 
@@ -40,8 +41,12 @@ else
 @code {
     private WeatherForecast[]? forecasts;
 
-    protected override async Task OnInitializedAsync()
+    
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
+        await JS.InvokeVoidAsync("console.warn", "loaded");
+
         forecasts = await ForecastService.GetForecastAsync(DateOnly.FromDateTime(DateTime.Now));
     }
+
 }
