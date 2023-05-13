@@ -1,9 +1,65 @@
 ﻿@page "/"
+@using BlazorTodo.Data;
+@using Microsoft.EntityFrameworkCore;
 
-<PageTitle>Index</PageTitle>
+@inject BlazoTaskDbContext _dbContext
 
-<h1>Hello, world!</h1>
+<PageTitle>Blazor Task</PageTitle>
 
-Welcome to your new app.
+<h1 style="font-size:1.5rem;text-align:center;text-decoration:dashed;">Welcome to blazor task application</h1>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<p> Total Tasks: @Tasks.Count</p>
+
+@if(Tasks.Count > 0)
+{
+    <table style="border-collapse: collapse; width: 100%;">
+        <thead>
+            <tr>
+                <th style="border: 1px solid black; padding: 8px;">Title</th>
+                <th style="border: 1px solid black; padding: 8px;">Description</th>
+                <th style="border: 1px solid black; padding: 8px;">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var task in Tasks)
+            {
+                <tr>
+                    <td style="border: 1px solid black; padding: 8px;"> @task.Title</td>
+                    <td style="border: 1px solid black; padding: 8px;">@task.Description</td>
+                    <td style="border: 1px solid black; padding: 8px;">
+                        @if (task.Done)
+                        {
+                            <span style="display: inline-block; padding: 4px 8px; font-size: 12px; font-weight: bold; text-transform: uppercase; color: #fff; background-color: #007bff; border-radius: 999px;">Done</span>
+                        }
+                        else
+                        {
+                            <span style="display: inline-block; padding: 4px 8px; font-size: 12px; font-weight: bold; text-transform: uppercase; color: #fff; background-color: #ff9800; border-radius: 999px;">To Do</span>
+                        }
+
+                        </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+   
+}
+else
+{
+    <p>You don't have a task</p>
+}
+
+@code{
+
+    public List<Data.Task> Tasks { get; set; }
+
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        await LoadTasks();
+    }
+
+
+    public async System.Threading.Tasks.Task LoadTasks()
+    {
+        Tasks = await _dbContext.Tasks.ToListAsync();
+    }
+}
